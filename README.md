@@ -192,6 +192,12 @@ services:
 
 For detailed attributes, see [SP remote metadata reference#SAML 2.0 options](https://simplesamlphp.org/docs/stable/simplesamlphp-reference-sp-remote#section_2).
 
+## Building the Image
+
+### Prerequisites for building on Windows
+
+* make (tested with Chocolatey installed version)
+
 ## Inspired By
 
 - https://github.com/kristophjunge/docker-test-saml-idp

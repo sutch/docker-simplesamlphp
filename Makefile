@@ -1,7 +1,21 @@
-NAME                  := $(shell basename $(CURDIR) | sed -e "s/^docker-//g")
+ifeq ($(OS),Windows_NT)
+	detected_OS := Windows
+else
+	detected_OS := $(shell uname -s)
+endif
+
+ifeq ($(detected_OS),Windows)	
+	NAME := $(shell powershell -NoProfile -Command "$$name = Split-Path (Get-Location).Path -Leaf; if ($$name.StartsWith('docker-')) { $$name.Substring(7) } else { $$name }")
+else
+	NAME := $(shell basename $(CURDIR) | sed -e "s/^docker-//g")
+endif
 REVISION              := $(shell git rev-parse --short HEAD)
 ORIGIN                := $(shell git remote get-url origin)
-SIMPLESAMLPHP_VERSION := $(shell cat .simplesamlphp_version)
+ifeq ($(detected_OS),Windows)	
+	SIMPLESAMLPHP_VERSION := $(shell powershell -command "Get-Content .simplesamlphp_version -Raw")
+else
+	SIMPLESAMLPHP_VERSION := $(shell cat .simplesamlphp_version)
+endif
 REGISTRY_HOST         ?= index.docker.io
 REGISTRY_USERNAME     ?= defaultusername
 IMAGE                 := $(REGISTRY_HOST)/$(REGISTRY_USERNAME)/$(NAME)
